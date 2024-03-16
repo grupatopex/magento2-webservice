@@ -47,10 +47,23 @@ class File
         ];
 
         try {
-            $response = $this->httpClient->request('GET', $url, $options);
+            $response = $this->httpClient->request('GET', $this->encodeURI($url), $options);
             return $response->getContent();
         } catch (\Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * Encode URI to ensure it is properly formatted.
+     *
+     * @param string $uri The URI to encode.
+     * @return string The encoded URI.
+     */
+    private function encodeURI($uri)
+    {
+        return preg_replace_callback("{[^0-9a-z_.!~*'();,/?:@&=+$#-]}i", function ($m) {
+            return sprintf('%%%02X', ord($m[0]));
+        }, $uri);
     }
 }
