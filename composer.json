@@ -1,6 +1,6 @@
 {
     "name": "gtx/magento2-webservice",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": ["MIT"],
     "type": "magento2-module",
     "description": "Sample Magento 2 module for GTX webservice authorization.",

@@ -5,30 +5,39 @@
 namespace Gtx\Webservice\Model;
 
 use Gtx\Webservice\Helper\Data as Helper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\CurlHttpClient;
 
 class File
 {
     /**
-     * @var Helper
-     */
-    protected $helper;
-
-    /**
      * @var CurlHttpClient
      */
-    protected $httpClient;
+    protected CurlHttpClient $httpClient;
 
     /**
-     * @param Helper $helper
+     * @var Helper
+     */
+    protected Helper $helper;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $loger;
+
+    /**
      * @param CurlHttpClient $httpClient
+     * @param Helper $helper
+     * @param LoggerInterface $loger;
      */
     public function __construct(
+        CurlHttpClient $httpClient,
         Helper $helper,
-        CurlHttpClient $httpClient
+        LoggerInterface $loger
     ) {
         $this->helper = $helper;
         $this->httpClient = $httpClient;
+        $this->loger = $loger;
     }
 
     /**
@@ -43,13 +52,15 @@ class File
             'auth_ntlm' => [
                 'username' => $this->helper->getUsername(),
                 'password' => $this->helper->getPassword(),
-            ]
+            ],
+            'verify_peer' => $this->helper->getVerifyPeer()
         ];
 
         try {
             $response = $this->httpClient->request('GET', $this->encodeURI($url), $options);
             return $response->getContent();
         } catch (\Exception $e) {
+            $this->loger->critical($e->getMessage());
             return '';
         }
     }

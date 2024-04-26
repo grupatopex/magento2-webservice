@@ -13,8 +13,13 @@
                 <field id="username" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="1" translate="label" type="text">
                     <label>Username</label>
                 </field>
-                <field id="password" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="verify_peer" translate="label" type="select" sortOrder="30" showInDefault="1" canRestore="1">
+                    <label>Verify SSL certificate</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>
